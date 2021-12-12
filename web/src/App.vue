@@ -21,9 +21,11 @@ export default class App extends Vue {
     let userInfo = localStorage.getItem("userInfo");
     if (userInfo) {
       try {
-        userInfo = JSON.parse(userInfo);
-        this.mutationUpdateUserInfo(userInfo);
-        if (!this.isAdmin) {
+        let userInfoJson = JSON.parse(userInfo);
+        this.mutationUpdateUserInfo(userInfoJson);
+        if (!userInfoJson.phone) {
+          this.$router.push("/login");
+        } else if (!userInfoJson.isAdmin) {
           this.$router.push("/shopping");
         } else {
           this.$router.push("/manage");
