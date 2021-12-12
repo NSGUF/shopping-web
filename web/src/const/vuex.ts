@@ -3,4 +3,7 @@
  */
 export const MUTATIONS_KEYS = {
   updateUserInfo: 'updateUserInfo',
+  logout: 'logout'
 };
+
+

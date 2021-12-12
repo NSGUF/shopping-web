@@ -20,6 +20,11 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
+Route.post('/api/signup', 'SignupController.submitSignup')
+Route.post('/api/signin', 'SigninController.signin')
+Route.post('/api/logout', 'SigninController.logout')
+Route.post('/api/product', 'ProductController.add')
+Route.post('/api/buy', 'ProductController.buy')
+Route.get('/api/product', 'ProductController.get')
+Route.post('/api/img', 'ImgController.add')
+Route.get('/api/uploads/*', 'ImgController.get')

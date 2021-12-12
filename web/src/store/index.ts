@@ -1,31 +1,16 @@
 import Vue from "vue";
-import Vuex, { Store, StoreOptions } from "vuex";
-import { MUTATIONS_KEYS } from "../const/vuex";
+import Vuex, { Store } from "vuex";
+import user from './modules/user';
+import car from './modules/car';
+import { createLogger } from "vuex";
 
 Vue.use(Vuex);
 
-const state = {
-  userInfo: {
-    isLogin: false,
-    username: ''
+const store = new Store({
+  modules: {
+    user,
+    car
   },
-};
-
-type TypeState = typeof state;
-type TypeUserInfo = typeof state.userInfo;
-
-
-const options: StoreOptions<TypeState> = {
-  state,
-  mutations: {
-    [MUTATIONS_KEYS.updateUserInfo](state: TypeState, userInfo: TypeUserInfo) {
-      state.userInfo = userInfo;
-    },
-  },
-  getters: {
-    isLogin: (state: TypeState): boolean => state.userInfo.isLogin,
-    username: (state: TypeState): string => state.userInfo.username,
-  }
-};
-const store = new Store(options);
+  plugins: [createLogger()]
+});
 export default store;

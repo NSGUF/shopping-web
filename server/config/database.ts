@@ -50,5 +50,4 @@ const databaseConfig: DatabaseConfig = {
     },
   },
 }
-debugger;
 export default databaseConfig
