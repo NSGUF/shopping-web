@@ -7,6 +7,7 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import Product from 'App/Models/Product'
 import { loggerInfo } from 'App/logger'
 import BuyService from 'App/Services/BuyService'
+import MqService from '@ioc:MyProject/MqService';
 
 export default class ProductController {
   private table = 'products'
@@ -82,6 +83,10 @@ export default class ProductController {
       productId: product.id,
     })
     console.log(buy)
+
+    // TODO 下发
+    MqService.buy(user.id, product.id);
+
     loggerInfo(user.id, 'buy success', id)
     return DEFAULT_JSON
   }
