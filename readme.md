@@ -1,6 +1,39 @@
 # 后端
 typescript+adonisjs+mysql
 
+# 消息队列
+参考：https://www.cnblogs.com/stopfalling/p/5375492.html 
+https://juejin.cn/post/6844904118075523079   
+
+串行：将多个任务按顺序处理；  
+并行：将多个任务同时异步处理，减少处理时间，提高处理效率；  
+消息队列：将不必须的业务逻辑，异步处理，响应时间相当于将处理写入数据库的时间；  
+
+订单系统：用户下单后，订单系统完成持久化处理，将消息写入消息队列，返回用户订单下单成功。
+库存系统：订阅下单的消息，采用拉/推的方式，获取下单信息，库存系统根据下单信息，进行库存操作。
+假如：在下单时库存系统不能正常使用。也不影响正常下单，因为下单后，订单系统写入消息队列就不再关心其他的后续操作了。实现订单系统与库存系统的应用解耦。
+
+# 用IOC实现MQ
+IOC资料：https://medium.com/@shemsiu/ioc-container-and-dependency-injection-in-adonis-v5-216774c2a476    
+
+# rabbitmq
+mac安装：brew install rabbitmq  
+一堆依赖库装不上，装不上的库一个个单独install就好了；  
+
+启动服务：rabbitmq-server   
+账号密码都是guest；  
+
+# consume是下游服务
+先浸入consume运行yarn dev；
+
+# 六边形架构
+资料：https://www.dossier-andreas.net/software_architecture/ports_and_adapters.html  
+
+
+# 基于node和rabbitMQ搭建消息队列
+参考：https://www.jianshu.com/p/a4d92d0d7e19  
+
+
 ##  踩坑记录
 1. ❯ error database/migrations/1638886544587_users
    [ error ]  create table `users` (`id` int unsigned not null auto_increment primary key, `email` varchar(255) not null, `password` varchar(180) not null, `remember_me_token` varchar(255) null, `created_at` timestamp not null, `updated_at` timestamp not null) - ER_INVALID_DEFAULT: Invalid default value for 'updated_at'

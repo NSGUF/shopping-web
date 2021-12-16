@@ -82,9 +82,7 @@ export default class ProductController {
       count: 1,
       productId: product.id,
     })
-    console.log(buy)
-
-    // TODO 下发
+    // 下发到下游系统
     MqService.buy(user.id, product.id);
 
     loggerInfo(user.id, 'buy success', id)
