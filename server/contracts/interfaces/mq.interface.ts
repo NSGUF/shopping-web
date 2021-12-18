@@ -1,3 +1,4 @@
 export default interface MqInterface {
-    buy (userId: number, productId: number): void;
+  initMq(): void
+  buy(userId: number, productId: number): void
 }

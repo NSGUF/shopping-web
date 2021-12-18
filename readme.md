@@ -21,6 +21,7 @@ mac安装：brew install rabbitmq
 一堆依赖库装不上，装不上的库一个个单独install就好了；  
 
 启动服务：rabbitmq-server   
+访问：http://localhost:15672/#/
 账号密码都是guest；  
 
 # consume是下游服务
@@ -28,6 +29,10 @@ mac安装：brew install rabbitmq
 
 # 六边形架构
 资料：https://www.dossier-andreas.net/software_architecture/ports_and_adapters.html  
+> 六边形架构又名端口适配器架构，主要目的是将应用程序的核心逻辑和使用分离，而且允许插入到不同的服务中，并且允许在没有服务的情况下运行；  
+> 通过插入自定义适配器来创建自己应用的变体；
+
+我这里将service注入到controller中，controller依赖抽象到接口，然后通过配置去改变最后的接口功能；
 
 
 # 基于node和rabbitMQ搭建消息队列

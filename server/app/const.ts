@@ -25,7 +25,6 @@ export const ERROR_JSON = {
   message: '接口错误',
   data: null,
 }
-
 export const UNAUTH_JSON = {
   code: 401,
   message: '请先登陆',

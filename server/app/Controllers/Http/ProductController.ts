@@ -1,18 +1,36 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { CreateProductValidator } from 'App/Validators/ProductValidators'
 import { BuyValidator } from 'App/Validators/BuyValidators'
-import ProductService from 'App/Services/ProductService'
 import { DEFAULT_JSON, LIST_JSON, UNAUTH_JSON, ERROR_JSON } from 'App/const'
 import Database from '@ioc:Adonis/Lucid/Database'
 import Product from 'App/Models/Product'
 import { loggerInfo } from 'App/logger'
-import BuyService from 'App/Services/BuyService'
-import MqService from '@ioc:MyProject/MqService';
+import BuyInterface from 'Contracts/interfaces/buy.interface'
+import ProductInterface from 'Contracts/interfaces/product.interface'
+import MqInterface from 'Contracts/interfaces/mq.interface'
 
 export default class ProductController {
   private table = 'products'
   private model = Product
-  private service = ProductService
+  private service: ProductInterface
+  private buyService: BuyInterface
+  private mqService: MqInterface
+
+  constructor(service: ProductInterface, buyService: BuyInterface, mqService: MqInterface) {
+    if (!service) {
+      throw service + 'service is not empty'
+    }
+
+    if (!buyService) {
+      throw buyService + 'service is not empty'
+    }
+    if (!mqService) {
+      throw mqService + 'service is not empty'
+    }
+    this.service = service
+    this.buyService = buyService
+    this.mqService = mqService
+  }
 
   public async add({ request, session }: HttpContextContract) {
     const user = session.get('user')
@@ -77,13 +95,13 @@ export default class ProductController {
     }
     product.total--
     product.save()
-    let buy = await BuyService.buy({
+    await this.buyService.buy({
       userId: user.id,
       count: 1,
       productId: product.id,
     })
     // 下发到下游系统
-    MqService.buy(user.id, product.id);
+    this.mqService.buy(user.id, product.id)
 
     loggerInfo(user.id, 'buy success', id)
     return DEFAULT_JSON

@@ -1,12 +1,19 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { CreateImgValidator } from 'App/Validators/ImgValidators'
-import ImgService from 'App/Services/ImgService'
 import { DEFAULT_JSON, UNAUTH_JSON } from 'App/const'
 import Drive from '@ioc:Adonis/Core/Drive'
 import { extname } from 'path'
 import Logger from '@ioc:Adonis/Core/Logger'
+import ImgInterface from 'Contracts/interfaces/img.interface'
 
 export default class ProductController {
+  private service: ImgInterface
+  constructor(service: ImgInterface) {
+    if (!service) {
+      throw service + 'service is not empty'
+    }
+    this.service = service
+  }
   public async add({ request, session }: HttpContextContract) {
     const user = session.get('user')
     if (!user) {
@@ -14,7 +21,7 @@ export default class ProductController {
     }
     Logger.info('logger：' + user.id + ' upload img ')
     const payload = await request.validate(CreateImgValidator)
-    let fileName = await ImgService.upload(payload)
+    let fileName = await this.service.upload(payload)
     Logger.info('logger：' + user.id + 'upload img success')
     return {
       ...DEFAULT_JSON,
